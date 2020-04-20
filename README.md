@@ -1,6 +1,7 @@
 
 
-# Serverless TODO Project extended and updated from [this project](https://github.com/ousat/serverless-project).
+# Serverless TODO Project 
+extended and updated from [this project](https://github.com/ousat/serverless-project).
 
 
 ## To Run the Project:
