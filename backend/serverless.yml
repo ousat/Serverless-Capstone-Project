@@ -1,16 +1,24 @@
 service:
-  name: sls-todo-app
+  name: sls-todo-app-v2
 
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-aws-documentation
   - serverless-reqvalidator-plugin
+  - serverless-plugin-tracing
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-plugin-canary-deployments
 
 package:
   individually: true
 
 custom:
+
+  topicName: todo-topic-${self:provider.stage}
+  topicPublisher: sls-todo-publisher-${self:provider.stage}
+
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
@@ -22,7 +30,7 @@ custom:
     api:
       info:
         version: v1.0.0
-        title: ToDO API
+        title: ToDo API
         description: serverless api for ToDo application
     models:
       - name: CreateTodo
@@ -31,12 +39,29 @@ custom:
       - name: UpdateTodo
         contentType: application/json
         schema: ${file(validators/update-todo-request.json)}
+      - name: TodoRequestSearch
+        contentType: application/json
+        schema: ${file(src/requests/search-todo-request.json)}
+  
+  serverless-offline:
+    port: 3003
+  
+  dynamobd:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    stages: 
+      - dev
 
 provider:
   name: aws
   runtime: nodejs12.x
   apiGateway:
     minimumCompressionSize: 1024
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
 
   environment:
     TODO_TABLE: todo-${self:provider.stage}
@@ -45,6 +70,7 @@ provider:
     USER_ID_INDEX: userId
     AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
     AUTH_0_SECRET_FIELD: auth0Secret
+    SIGNED_URL_EXPIRATION: 300
 
   tracing:
     lambda: true
@@ -140,6 +166,38 @@ functions:
           authorizer: Auth
           cors: true
 
+  SyncWithElasticsearch:
+    handler: src/lambda/dynamodb/elasticSearchSync.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt TodoDynamoDBTable.StreamArn
+    environment:
+      ES_ENDPOINT: !GetAtt TodoSearch.DomainEndpoint
+      SNS_ARN:
+        Fn::Join:
+          - ':'
+          - - arn:aws:sns
+            - Ref: AWS::Region
+            - Ref: AWS::AccountId
+            - ${self:custom.topicName}
+      TOPIC_NAME: ${self:custom.topicName}
+
+  SearchToDo:
+    handler: src/lambda/http/searchTodo.handler
+    events:
+      - http:
+          method: post
+          path: todos/search/
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Search Todos by values
+            description: search Todo contents and display results
+            requestModels:
+              'application/json': TodoRequestSearch
+
 
 resources:
   Resources:
@@ -184,6 +242,8 @@ resources:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODO_TABLE}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
 
     TodoBucket:
       Type: AWS::S3::Bucket
@@ -201,6 +261,12 @@ resources:
                 - HEAD
               AllowedOrigins:
                 - "*"
+
+    TodosTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: Todo topic
+        TopicName: ${self:custom.topicName}
 
     KMSKey:
       Type: AWS::KMS::Key
@@ -235,3 +301,30 @@ resources:
         Name: ${self:provider.environment.AUTH_0_SECRET_ID}
         Description: Auth0 secret
         KmsKeyId: !Ref KMSKey
+
+    TodoSearch:
+      Type: AWS::Elasticsearch::Domain
+      Properties:
+        ElasticsearchVersion: '6.3'
+        DomainName: todo-search-${self:provider.stage}
+        ElasticsearchClusterConfig:
+          DedicatedMasterEnabled: false
+          InstanceCount: '1'
+          ZoneAwarenessEnabled: false
+          InstanceType: t2.small.elasticsearch
+        EBSOptions:
+          EBSEnabled: true
+          Iops: 0
+          VolumeSize: 10
+          VolumeType: 'gp2'
+        AccessPolicies:
+          Version: '2012-10-17'
+          Statement:
+            -
+              Effect: Allow
+              Principal:
+                AWS: '*'
+              Action: 'es:*'
+              Resource: '*'
+
+
