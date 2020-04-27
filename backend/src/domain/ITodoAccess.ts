@@ -1,8 +1,8 @@
-import { TodoItem } from "../models/TodoItem";
-import { TodoDeleteResponse } from "../models/TodoDeleteResponse";
-import { UpdateTodoRequest } from "../requests/UpdateTodoRequest";
-import { TodoUpdateResponse } from "../models/TodoUpdateResponse";
-import { GetAllTodoResponse } from "../models/GetAllTodoResponse";
+import { TodoItem } from '../models/TodoItem';
+import { TodoDeleteResponse } from '../models/TodoDeleteResponse';
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
+import { TodoUpdateResponse } from '../models/TodoUpdateResponse';
+import { GetAllTodoResponse } from '../models/GetAllTodoResponse';
 
 export interface ITodoAccess{
     getAllTodos(userId:string,limit:number,nextKey:any): Promise<GetAllTodoResponse>;

@@ -1,8 +1,8 @@
-import { TodoItem } from "../models/TodoItem";
-import { ESAccess } from "../data/esAccess";
-import { ElasticSearchLogCategory } from "../models/ElasticSearchLogCategory";
-import { parseUserId } from "../auth/utils";
-import { createElasticSearchClient } from "../data/dependencyInjector";
+import { TodoItem } from '../models/TodoItem';
+import { ESAccess } from '../data/esAccess';
+import { ElasticSearchLogCategory } from '../models/ElasticSearchLogCategory';
+import { parseUserId } from '../auth/utils';
+import { createElasticSearchClient } from '../data/dependencyInjector';
 
 const esAccess = new ESAccess(createElasticSearchClient())
 
