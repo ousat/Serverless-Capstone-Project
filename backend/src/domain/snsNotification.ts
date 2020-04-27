@@ -1,5 +1,5 @@
-import { SNSAccess } from "../data/snsAccess";
-import { createTodosSNSInstance } from "../data/dependencyInjector";
+import { SNSAccess } from '../data/snsAccess';
+import { createTodosSNSInstance } from '../data/dependencyInjector';
 
 const snsArn = process.env.SNS_ARN
 const topic = process.env.TOPIC_NAME

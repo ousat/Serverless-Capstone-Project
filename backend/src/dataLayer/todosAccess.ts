@@ -1,6 +1,6 @@
-import { TodoItem } from "../models/todoItem";
-import { CreateTodoRequest } from "../requests/createTodoRequest";
-import { UpdateTodoRequest } from "../requests/updateTodoRequest";
+import { TodoItem } from '../models/todoItem';
+import { CreateTodoRequest } from '../requests/createTodoRequest';
+import { UpdateTodoRequest } from '../requests/updateTodoRequest';
 const uuid = require('uuid/v4')
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
