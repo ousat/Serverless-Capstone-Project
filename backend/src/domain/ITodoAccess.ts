@@ -1,6 +1,6 @@
-import { TodoItem } from '../models/TodoItem';
+import { TodoItem } from '../models/todoItem';
 import { TodoDeleteResponse } from '../models/TodoDeleteResponse';
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
+import { UpdateTodoRequest } from '../requests/updateTodoRequest';
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse';
 import { GetAllTodoResponse } from '../models/GetAllTodoResponse';
 
