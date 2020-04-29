@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 import { FakeTodoAccess } from '../data/FakeTodoAccess';
-import { TodoInteractor } from '../../src/interactor/todosInteractor';
+import { TodoInteractor } from '../../src/interactor/todoInteractor';
 
 describe('Todo Access using Interactor', function () {
  

@@ -1,4 +1,4 @@
-import { TodoItem } from '../models/TodoItem';
+import { TodoItem } from '../models/todoItem';
 import { ESAccess } from '../data/esAccess';
 import { ElasticSearchLogCategory } from '../models/ElasticSearchLogCategory';
 import { parseUserId } from '../auth/utils';
