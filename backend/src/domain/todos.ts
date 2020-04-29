@@ -1,11 +1,11 @@
 
 import { TodosAccess } from '../data/todosAccess'
-import { TodoItem } from '../models/TodoItem'
-import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import { TodoItem } from '../models/todoItem'
+import { CreateTodoRequest } from '../requests/createTodoRequest'
 import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+import { UpdateTodoRequest } from '../requests/updateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
-import { TodoInteractor } from '../interactor/todosInteractor'
+import { TodoInteractor } from '../interactor/todoInteractor'
 import { createDynamoDBClient } from '../data/dependencyInjector'
 import { GetAllTodoResponse } from "../models/GetAllTodoResponse"
 

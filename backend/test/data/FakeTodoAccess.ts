@@ -1,7 +1,7 @@
 import { TodoItem } from "../../src/models/TodoItem";
 import { ITodoAccess } from "../../src/domain/ITodoAccess";
 import { TodoDeleteResponse } from "../../src/models/TodoDeleteResponse";
-import { UpdateTodoRequest } from "../../src/requests/UpdateTodoRequest";
+import { UpdateTodoRequest } from "../../src/requests/updateTodoRequest";
 import { TodoUpdateResponse } from "../../src/models/TodoUpdateResponse";
 import { GetAllTodoResponse } from "../../src/models/GetAllTodoResponse";
 
