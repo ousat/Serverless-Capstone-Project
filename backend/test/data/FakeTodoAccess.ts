@@ -1,4 +1,4 @@
-import { TodoItem } from "../../src/models/TodoItem";
+import { TodoItem } from "../../src/models/todoItem";
 import { ITodoAccess } from "../../src/domain/ITodoAccess";
 import { TodoDeleteResponse } from "../../src/models/TodoDeleteResponse";
 import { UpdateTodoRequest } from "../../src/requests/updateTodoRequest";
