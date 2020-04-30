@@ -1,6 +1,6 @@
 import { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import 'source-map-support/register'
-import { TodoItem } from '../../models/TodoItem'
+import { TodoItem } from '../../models/todoItem'
 import { logNewTodoItemInES, logDoneTodoItemInES } from '../../domain/elasticSearch'
 import { notifyForNewTodo, notifyForDoneTodo } from '../../domain/snsNotification'
 
